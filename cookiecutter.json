@@ -1,4 +1,5 @@
 {
-  "name": "bag",
+  "bag_name": "Bag Name",
+  "package_name": "{{ cookiecutter.bag_name.lower().replace(' ', '_').replace('-', '_') }}",
   "description": "A Python Package"
 }
