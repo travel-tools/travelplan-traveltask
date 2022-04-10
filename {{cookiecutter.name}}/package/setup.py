@@ -9,7 +9,7 @@ with open(requirements_file, "r") as f:
 
 
 # Package configuration
-_NAME = "{{cookiecutter.name}}"
+_NAME = "{{cookiecutter.package_name}}"
 setup(
     name=_NAME,
     version="0.0.0",
