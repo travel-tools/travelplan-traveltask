@@ -1,71 +1,55 @@
-# Travel Plan
+# Travel Task
 
-The base structure to extend to create a [Travel](https://github.com/travel-tools/travel) Plan.
+The base structure to extend to create a [Travel](https://github.com/travel-tools/travel) Task.
 
-Travel Plans use [Cookiecutter](https://github.com/cookiecutter/cookiecutter) under the hood. Please, refer to their documentation.
+This is a [Travel Plan](https://github.com/travel-tools/cookiecutter-travelplan).
 
-## What is a Travel Plan
+Travel can download Travel Tasks from PyPi registries or use a local Travel Task provided that it is a Bag inside the current Travel project.
 
-A Travel Plan is a tool to speed up the creation of new projects. A Plan refers to the template of Travel Bags.
+### Creating a Travel Task
 
-Instead of manually creating repetitive folder structures, you can use `travel plan` to make them for you.
+Issue a `travel add <repo_url_of_plan or path_to_plan_folder>` command in the folder where you want to create a new Bag of a Travel Task.
 
-A Travel Plan is a repository or structure that is used by Travel to create a Bag (for instance, another Python package) with a well-known format easily.
-
-There are plenty of public Plans to use that should cover most needs.
-
-## How to use a Plan
-
-You can either use several Plans at once (e.g. to create different Bags) or use a single Plan from command line, interactively.
-
-### Several Plans at once
-
-Once you have choosen the perfect Plans (or you have created one by yourself, as explained below), you are ready to create a `travel.yml` file and then run `travel plan <name>`, which will look for it.
-
-In the `travel.yml` you have to specify the structure of your Bags. For instance, to create a project like this:
+For instance, to use this basic Travel Task, use:
 
 ```
-name/
-  common/
-  microservices/
-      first/
-      second/
-travel.yml
+travel add https://github.com/travel-tools/travelplan-traveltask.git
 ```
 
-You have to run write the following `travel.yml` and run `travel plan name` in the same folder:
+### Customizing a Travel Task
 
+- Declare parameters that you'll reference in the Bag
+- Write your Task code
+
+#### Declare parameters
+
+Simply add a new field in `config.py` with its type. Nested/dictionary parameters are not supported. 
+
+Note: this type will be used in `argparse`'s `parser.add_argument` call.
+
+
+`config.py`
 ```
-common:
-  plan: <repo_url_of_plan or path_to_plan_folder>
-  config:
-    ...
+from dataclasses import dataclass
 
-microservices:
 
-  first:
-    plan: <repo_url_of_plan or path_to_plan_folder>
-    config:
-      ...
+@dataclass
+class TaskConfig:
 
-  second:
-    plan: <repo_url_of_plan or path_to_plan_folder>
-    config:
-      ...
+    # Travel parameters
+    context: str
+    task: str
+
+    # Custom parameters
+    example: str  # Required parameter
+    another_example: int = 0  # Optional parameter
+    another_param: str = None  # Optional parameter
 ```
 
-Please refer to the documentation of the specific Plan to know how to write the relative section of `config` in the `travel.yml`.
+#### Write your Task Code
 
+Simply add your Task code in `task.py`, in the `perform` function.
 
-### Single Plan from command line (interactive)
+It will receive an instance of your `TaskConfig` with all its attributes.
 
-Issue a `travel add <repo_url_of_plan or path_to_plan_folder>` command in the folder where you want to create a new Bag.
-
-This will ask you for the parameters defined in the `cookiecutter.json` file interactively.
-
-If you *do not want interactivity*, just add all the configs after the command as specified by [Cookiecutter](https://github.com/cookiecutter/cookiecutter) docs. This command is just an alias for `cookiecutter <repo_url_of_plan or path_to_plan_folder>`.
-
-
-## Creating a Travel Plan
-
-To create a Travel Plan, you have to clone this repo. Feel free to modify it according to [Cookiecutter](https://github.com/cookiecutter/cookiecutter) docs.
+You are free to create nested modules to reference other functions. Just remember that Travel will run `__main__.py` with parameters read from the Bag as command line arguments.
