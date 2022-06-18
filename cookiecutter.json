@@ -1,5 +1,5 @@
 {
-  "name": "bag_name",
+  "name": "traveltask_example",
   "package_name": "{{ cookiecutter.name.lower().replace(' ', '_').replace('-', '_') }}",
-  "description": "A Python Package"
+  "description": "A Travel Task"
 }
